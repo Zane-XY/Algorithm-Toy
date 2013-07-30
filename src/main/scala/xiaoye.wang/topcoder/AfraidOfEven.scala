@@ -3,7 +3,10 @@ package xiaoye.wang.topcoder
 /**
  * Given an arithmetic progression T1 = a1, a2,...an (n >= 4, <= 1000), now divide every even value with 2,
  * until it's an odd, you'll get a T2, write a function that take a T2, return the minimal original T1
+ * From TopCoder
  *
+ * @author Zane.Wang
+ * @note I think the equation can be optimized into more simpler form
  */
 object AfraidOfEven extends App {
 
