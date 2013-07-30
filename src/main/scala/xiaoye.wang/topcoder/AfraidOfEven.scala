@@ -1,4 +1,4 @@
-package xiaoye.wang
+package xiaoye.wang.topcoder
 
 /**
  * Given an arithmetic progression T1 = a1, a2,...an (n >= 4, <= 1000), now divide every even value with 2,
