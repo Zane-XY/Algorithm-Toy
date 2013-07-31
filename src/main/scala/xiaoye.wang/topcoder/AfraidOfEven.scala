@@ -18,12 +18,7 @@ object AfraidOfEven extends App {
     val isAsc = arr.lastIndexOf(max) >= (len - 1).toFloat / 2
     val (rA, rB, rC) = ((0 to (max / pre)).toStream, (0 to (max / pos)).toStream, (0 to (max / odd)).toStream)
 
-    def pow2(n: Int): Int = n match {
-      case 0 => 1
-      case 1 => 2
-      case _ => pow2(n - 1) * 2
-    }
-
+    def pow2(n: Int): Int = scala.math.pow(2,n).toInt
     def diff(c: Int, a: Int) = odd * pow2(c) - pre * pow2(a)
     def equation(a: Int, b: Int, c: Int) = odd * pow2(c + 1) == (pre * pow2(a) + pos * pow2(b))
     def predicate(a: Int, b: Int, c: Int): Boolean = equation(a, b, c) && ((diff(c, a) >= 0) == isAsc)
