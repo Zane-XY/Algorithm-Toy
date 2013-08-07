@@ -1,6 +1,6 @@
 package xiaoye.wang.topcoder
 
-import scala.annotation.tailrec
+import scala.math._
 
 /**
  * Given an arithmetic progression T1 = a1, a2,...an (n >= 4, <= 1000), now divide every even value with 2,
@@ -16,13 +16,14 @@ object AfraidOfEven extends App {
     val (pre, odd, pos) = (arr(0), arr(1), arr(2))
     val (len, max) = (arr.length, arr.max)
     val isAsc = arr.lastIndexOf(max) >= (len - 1).toFloat / 2
-    val (rA, rB, rC) = ((0 to (max / pre)).toStream, (0 to (max / pos)).toStream, (0 to (max / odd)).toStream)
 
-    def pow2(n: Int): Int = scala.math.pow(2,n).toInt
+    def pow2(n: Int): Int = pow(2,n).toInt
+    def ld(n:Int):Int = (log(n) / log(2)).ceil.toInt
     def diff(c: Int, a: Int) = odd * pow2(c) - pre * pow2(a)
     def equation(a: Int, b: Int, c: Int) = odd * pow2(c + 1) == (pre * pow2(a) + pos * pow2(b))
     def predicate(a: Int, b: Int, c: Int): Boolean = equation(a, b, c) && ((diff(c, a) >= 0) == isAsc)
 
+    val (rA, rB, rC) = (0 to ld(max / pre) toStream, 0 to ld(max / pos) toStream, 0 to ld(max / odd) toStream)
     val (a, _, c) = (for (_c <- rC; _a <- rA; _b <- rB) yield (_a, _b, _c)).iterator.find(x => predicate(x._1, x._2, x._3)).get
 
     val head = arr(0) * pow2(a)
