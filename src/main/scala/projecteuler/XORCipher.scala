@@ -39,9 +39,9 @@ object SecretInduction {
 
   val alphaSet = ('a' to 'z').toSet ++ ('A' to 'Z').toSet
   val alphaMax = (for (outer <- alphaSet; inner <- alphaSet) yield outer ^ inner).max
-  val alphaFreq = (mutable.Map[Int, Int]() /: asciiArr)((m, x) => m.updated(x, m.get(x).getOrElse(0) + 1))
+  val alphaFreq = (mutable.Map[Int, Int]() /: asciiArr)((m, x) => m.updated(x, m.get(x).getOrElse(0) + 1)) toList
   // assuming the space character is the most frequent non-alphabetical repetition XORed with (x1,x2,x3)
-  val secret = alphaFreq.toList.filter(_._1 > alphaMax).sortWith(_._2 > _._2).take(3).map(_._1 ^ ' ' toChar)
+  val secret = alphaFreq.filter(_._1 > alphaMax).sortBy(- _._2).take(3).map(_._1 ^ ' ' toChar)
   //'the' possible frequency table (t x1, h x2, e x3) (t x2, h x3, e x1) (t x3, h x1, e x2)
   val secretSet = secret.permutations map { case l @ List(a, b, c) => l.mkString -> (a ^ 't', b ^ 'h', c ^ 'e') } toMap
   val theCombination = asciiArr.sliding(3) map { case Array(a, b, c) => (a, b, c) }
