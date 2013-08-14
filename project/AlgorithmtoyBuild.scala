@@ -14,4 +14,5 @@ object AlgorithmtoyBuild extends Build {
       // add other settings here
     )
   )
+
 }
