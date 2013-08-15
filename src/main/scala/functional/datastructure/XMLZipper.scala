@@ -20,9 +20,9 @@ case class Context(left: NodeSeq, p: Location, right: NodeSeq) extends Path
 /**
  * A location in the tree addresses a subtree, together with its path.
  * A location consists of a focus node and its path, representing its surrounding context
- * Node <: NodeSeq <: NodeSeq
- * @param focus
- * @param path
+ * Node <: NodeSeq <: Seq[Node]
+ * @param focus the subtree under current node
+ * @param path the parent path, with a hole
  */
 case class Location(focus: Node, path: Path) {
   // navigation primitives
@@ -91,94 +91,28 @@ case class Location(focus: Node, path: Path) {
   }
 
   /**
-   * this delete method will delete the current focus node and moves up
-   * this will be efficient if you just want to delete a single none
-   * @return
-   */
-  def deleteSingle = path match {
-    case Top => None
-    case Context(l, p, r) =>
-      val children = l.reverse ++ r
-      Some(Location(focus match {
-        case e: Elem => e.copy(child = children)
-      }, p.path))
-  }
-
-  /**
-   * if the current node is deleted, the next right sibling will be used, if it's empty then using the closest left sibling, if it's the single node then calls deleteSingle
+   * if the current node is deleted, the next right sibling will be used,
+   * if it's empty then using the closest left sibling, if it's the single node then moves up
    * @return
    */
 
   def delete = path match {
     case Top => None
     case Context(l, p, r) =>
-      if (l.isEmpty && r.isEmpty) Some(Location(focus match {
-        case e: Elem => e.copy(child = l ++ r)
-      }, p.path))
-      else
-        r.headOption map {
-          head => Location(head, Context(l, p, r.tail))
-        } orElse (
-          l.lastOption map {
-            last => Location(last, Context(l.init, p, r))
-          })
+      if (l.isEmpty && r.isEmpty)
+        Some(Location(p.focus match {case e : Elem => e.copy(child = Seq())}, p.path))
+      else if (l.isEmpty)
+        r.headOption map (Location(_, Context(l, p, r.tail)))
+      else l.lastOption map (Location(_, Context(l.init, p, r)) )
   }
 
-  /*
-  def update(n:Node) = {print("the current Location for updating " + this);this.copy(focus = n)}
+  def depthFirst = ???
 
-  */
-  /**
-   * get the nearest upright node
-   * @return
-   */
-  /*
-   def goUpRight:Either[Throwable,Location] = path match {
-     case Top => Left(new Exception("already the top most"))
-     case _ => goUp.fold(
-       fail => Right(this),// go up only failed at Top node
-       succ => succ.goRight.fold(
-         fail=>  succ.goUpRight, // went up, but can't go right
-         succ => Right(succ) // went up and at the right of previous up
-       )
-     )
-   }
-   */
-  /**
-   * move will do a depth-first traversal starting from the current focus and straight to the right most sibling.
-   * the result of the move will be the right most sibling location
-   * that means if you move from the Top, then all the nodes are traversed
-   * @return
-   */
-  /*
+  def breathFirst = ???
 
-   def move(f: Node => Node):Either[Throwable,Location] = map(f).goDown.fold( // depth first
-     fail => goRight.fold( // if can't go further then go right
-       fail => goUpRight.fold(
-         fail => Right(this),//goUpRight can only fail when it's Top. the base case
-         succ => succ.move(f)), // if can't go right, go upright, get the nearest upright
-       succ => succ.move(f) // if can go right, then recursive the operation to the next node
-       ) ,
-     succ => succ.move(f)
-    )
+  def update(n:Node) = this.copy(focus = n)
 
-
-   def move(f: Node => Node):Either[Throwable,Location] = {
-     val tempLoc = map(f).goDown
-     println(tempLoc.toString)
-     tempLoc.fold( // depth first
-     fail => goRight.fold( // if can't go further then go right
-       fail => goUpRight.fold(
-         fail => Right(this),//goUpRight can only fail when it's Top. the base case
-         succ => succ.move(f)), // if can't go right, go upright, get the nearest upright
-       succ => succ.move(f) // if can go right, then recursive the operation to the next node
-     ) ,
-     succ => succ.move(f)
-   )
-   }
-   def map(f : Node => Node) = update(f(focus))
-
-   def updateWith(f: Node => Node) = this.copy(focus =  f(focus))*/
+  def toXMLString = ???
 
   override def toString() = {
     "focus:" + focus + " | path:" + path
