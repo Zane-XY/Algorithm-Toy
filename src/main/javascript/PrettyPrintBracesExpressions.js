@@ -52,8 +52,8 @@ function indentBrace(s) {
 			}
 		}
 	}
-	return arr;
+	return arr.join("\n");
 }
 
-var s1 = indentBrace(t).join("\n");
+var s1 = indentBrace(t);
 console.log(s1);
