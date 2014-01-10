@@ -41,7 +41,7 @@ function closeBraceIndex(openIndex, arr) {
 
 function indentBrace(s) {
 	var arr = s.replace(/\(|\),|\)|,/g, function(m) {
-		return m == ")," | m == ")" ? "\n" + m + "\n" : m + "\n";
+		return m == ")," || m == ")" ? "\n" + m + "\n" : m + "\n";
 	}).split("\n");
 
 	for (k = 0; k < arr.length; k++) {
