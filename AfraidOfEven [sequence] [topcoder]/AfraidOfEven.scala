@@ -1,7 +1,5 @@
 package xiaoye.wang.topcoder
 
-import scala.math._
-
 /**
  * Given an arithmetic progression T1 = a1, a2,...an (n >= 4, <= 1000), now divide every even value with 2,
  * until it's an odd, you'll get a T2, write a function that take a T2, return the minimal original T1
@@ -17,7 +15,7 @@ object AfraidOfEven extends App {
     val (len, max) = (arr.length, arr.max)
     val isAsc = arr.lastIndexOf(max) >= (len - 1).toFloat / 2
 
-    def pow2(n: Int): Int = pow(2,n).toInt
+    def pow2(n: Int): Int = 1 << n
     def ld(n:Int):Int = (log(n) / log(2)).ceil.toInt
     def diff(c: Int, a: Int) = odd * pow2(c) - pre * pow2(a)
     def equation(a: Int, b: Int, c: Int) = odd * pow2(c + 1) == (pre * pow2(a) + pos * pow2(b))
