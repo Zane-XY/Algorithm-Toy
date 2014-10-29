@@ -1,7 +1,7 @@
 
 
    /**
-	 * give an new int[] {1,4,5,-3,-5}, move all the negative ints before
+	 * given an new int[] {1,4,5,-3,-5}, move all the negative ints before
 	 * positive, require O(N)
 	 * 
 	 * key points, loop  the array from both sides,  decrement only when necessary
